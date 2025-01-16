@@ -14,7 +14,7 @@ function AboutMe() {
                 {/* About Me Section */}
                 <div className="section">
                     <div className="section-content" style={{ flex: 2, alignItems: "center" }}>
-                        <img src={myPhoto} alt="My Profile" className='img' />
+                        <img src={myPhoto} alt="My Profile" className='img' style={{maxHeight: '300px'}}/>
                     </div>
                     <div className="section-content" style={{ flex: 3 }}>
                         <h2 style={{margin: 0}}>ABOUT ME</h2>
@@ -116,7 +116,7 @@ function AboutMe() {
                             <h2>AI Fall Detection Bot</h2>
                             <img src={fallDetectionPhoto} alt="fall detection photo" className='img'/>
                             <button className="button" onClick={() => window.open('https://github.com/HaskizMe/ai_fall_detection', '_blank')}>
-                                Fall Detection
+                                Fall Detection Bot
                             </button>
                         </div>
                         <div className='github-section-item'>

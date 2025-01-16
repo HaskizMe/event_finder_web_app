@@ -11,6 +11,7 @@
 .section-content {
     padding: 20px;
     margin: 20px;
+    width: 100%;
     /* max-height: 400px; */
     /* max-width: 80%; */
     display: flex;
@@ -22,20 +23,11 @@
 
 .img {
     max-width: 100%;     /* Image scales down with its container */
-    max-height: 300px;        /* Maintain aspect ratio */
+    max-height: 200px;        /* Maintain aspect ratio */
     border-radius: 20px;
 }
 
-/* Add a media query for smaller screens */
-@media (max-width: 768px) {
-    .section {
-        flex-direction: column; /* Stack image and text vertically */
-    }
 
-    .section-content {
-        width: 100%; /* Ensure full width for content in vertical layout */
-    }
-}
 
 .divider{
     margin-top: 30px;
@@ -59,7 +51,7 @@
     width: 100%;
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 10px;
     justify-content: space-evenly; /* Center items horizontally */
     align-items: center; /* Center items vertically */
     
@@ -70,8 +62,8 @@
     justify-content: space-between;
     flex-direction: column;
     align-items: center;
-    width: 500px;
-    height: 500px;
+    width: 400px;
+    height: 400px;
     /* background-color: beige; */
 }
 
