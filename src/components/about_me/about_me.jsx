@@ -4,11 +4,12 @@ import golfPhoto from '../../assets/golf swing.jpg'
 import fallDetectionPhoto from '../../assets/fall detection pic.jpeg'
 import painDrainPhoto from '../../assets/pain drain.png'
 import uvuLogoPhoto from '../../assets/uvulogo.jpg'
+import githubLogoPhoto from '../../assets/github logo.png'
 
 function AboutMe() {
     return (
         <>
-            <div style={{margin: '20px', marginBottom: '200px'}}>
+            <div style={{margin: 'auto', marginBottom: '200px', maxWidth: '1800px'}}>
 
                 {/* About Me Section */}
                 <div className="section">
@@ -16,8 +17,7 @@ function AboutMe() {
                         <img src={myPhoto} alt="My Profile" className='img' />
                     </div>
                     <div className="section-content" style={{ flex: 3 }}>
-                        <p>Description</p>
-                        <h3 style={{margin: 0}}>ABOUT ME</h3>
+                        <h2 style={{margin: 0}}>ABOUT ME</h2>
                         <p>My name is Bailey Haskell, and I am a dedicated student with a strong 
                             passion for technology and software development. Over the past four 
                             years, I have immersed myself in coding, constantly expanding my 
@@ -45,7 +45,7 @@ function AboutMe() {
                 {/* Education Section */}
                 <div className="section">
                     <div className="section-content" style={{ flex: 3 }}>
-                            <h3 style={{margin: 0}}>Education</h3>
+                            <h2 style={{margin: 0}}>Education</h2>
                             <p>I began my educational journey at Ensign College in Salt Lake City, 
                                 where I earned my associate’s degree in Computer Science. During my 
                                 time there, I developed a strong foundation in programming, problem-solving, 
@@ -73,14 +73,43 @@ function AboutMe() {
                 <div className='divider'></div>
 
                 {/* Github Projects Section */}
+                <div className="section">
+                    <div className="section-content" style={{ flex: 2, alignItems: "center" }}>
+                        <img src={githubLogoPhoto} alt="github logo" className='img' />
+                    </div>
+                    <div className="section-content" style={{ flex: 3 }}>
+                        <h2 style={{margin: 0}}>GitHub</h2>
+                        <p>I have worked on a variety of projects, from building mobile apps with Flutter 
+                            to developing intelligent systems using embedded hardware and AI models. 
+                            These experiences have enhanced my technical skills and fueled my passion 
+                            for solving real-world problems with innovative solutions.</p>
+
+                        <h4 style={{marginBottom: 0}}>Golf Swing Accelerator</h4>
+                        <p>I developed a mobile app that connects to an embedded system 
+                            via Bluetooth to analyze a user’s golf swing. The app measures 
+                            swing acceleration and position, providing real-time feedback on 
+                            speed and distance to help users refine their performance.</p>
+
+                        <h4 style={{marginBottom: 0}}>AI Fall Detection Bot</h4>
+                        <p>I created an AI-powered fall detection system that uses advanced posture analysis to identify potential falls. 
+                            It sends real-time alerts with confidence scores, ensuring quick responses to detected incidents.</p>
+
+                        <h4 style={{marginBottom: 0}}>Pain Drain App</h4>
+                        <p>I designed a mobile app that lets users control a PainDrain device. The app manages 
+                            settings for heat, cooling, TENS, and vibration, providing targeted pain relief 
+                            through a simple and intuitive interface.</p>
+
+                        <p>Check out the source code on my GitHub! 👇</p>
+
+                    </div>
+                </div>
                 <div className='github-section'>
-                    <h1 style={{color: 'gray'}}>GitHub Projects</h1>
                     <div className='github-section-content'>
                         <div className='github-section-item'>
                             <h2>Golf Swing Accelerator</h2>
                             <img src={golfPhoto} alt="golf photo" className='img'/>
                             <button className="button" onClick={() => window.open('https://github.com/HaskizMe/golf_swing_accelerator', '_blank')}>
-                                Fall Detection
+                                Golf App
                             </button>
                         </div>
                         <div className='github-section-item'>
@@ -98,8 +127,6 @@ function AboutMe() {
                             </button>
                         </div>
                     </div>
-  
-
                 </div>
 
             </div>
