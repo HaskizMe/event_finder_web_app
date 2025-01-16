@@ -1,0 +1,32 @@
+/* Reset margins and padding for body and html */
+html, body {
+  margin: 0;
+  min-width: 400px;
+}
+
+/* Navbar styles */
+.navbar {
+  display: flex;
+  width: 100%; /* Span the full width of the page */
+  height: 60px; /* Adjust the height as needed */
+  background-color: rgb(255, 255, 255); /* Set the desired background color */
+  justify-content: center; /* Space out content within the navbar */
+  align-items: center; /* Vertically align items */
+  box-sizing: border-box; /* Include padding and border in width/height calculations */
+}
+
+.navbar-item:hover{
+  background-color: rgb(98, 98, 98);
+}
+
+.navbar-item{
+  margin: 10px;
+  width: 100px;
+  height: 50px;
+  display: flex;
+  justify-content: center; /* Centers horizontally */
+  align-items: center; /* Centers vertically */
+  cursor: pointer;
+  background-color: rgb(0, 0, 0);
+  border-radius: 10px;
+}
