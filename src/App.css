@@ -8,16 +8,23 @@ html, body {
 /* Navbar styles */
 .navbar {
   display: flex;
+  padding-left: 20px;
+  padding-right: 20px;
   min-width: 100%; /* Use 100% instead of 100vw */
-  height: 60px; /* Adjust the height as needed */
+  /* height: 60px; */
   background-color: rgb(255, 255, 255); /* Set the desired background color */
-  justify-content: center; /* Space out content within the navbar */
+  justify-content: space-between; /* Space out content within the navbar */
   align-items: center; /* Vertically align items */
   box-sizing: border-box; /* Include padding and border in width/height calculations */
 }
 
 .navbar-item:hover {
   background-color: rgb(98, 98, 98);
+}
+
+.nav-bar-navigation-box {
+  display: flex;
+  /* background-color: aqua; */
 }
 
 .navbar-item {
