@@ -1,0 +1,77 @@
+.section {
+    display: flex;
+    flex-direction: row; /* Default layout: image and text side by side */
+    flex-wrap: wrap;     /* Allows wrapping */
+    justify-content: center;
+    align-items: center;
+    gap: 10px;           /* Add spacing between image and text */
+    /* background-color: blue; */
+}
+
+.section-content {
+    padding: 20px;
+    margin: 20px;
+    width: 100%;
+    /* max-height: 400px; */
+    /* max-width: 80%; */
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: start; /* Center-align text for a better layout in narrow views */
+    /* background-color: brown; */
+}
+
+.img {
+    max-width: 600px;     /* Image scales down with its container */
+    border-radius: 20px;
+}
+
+.divider{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 100%;
+    background-color: rgb(145, 145, 145);
+    height: 2px;
+    border-radius: 5px;
+}
+
+.github-section {
+    display: flex; /* Enable flexbox layout */
+    flex-direction: column; /* Stack items vertically */
+    justify-content: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
+    text-align: center; /* Center text inside the container */
+    margin: 20px 0; /* Add spacing above and below */
+}
+
+.github-section-content{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-evenly; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
+    
+}
+
+.github-section-item{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    width: 400px;
+    height: 400px;
+    /* background-color: beige; */
+}
+
+.button{
+    width: 50%;
+    height: 10%;
+    background-color: black;
+    align-items: center;
+    cursor: pointer;
+}
+
+.button:hover{
+    border-color: white;
+}
