@@ -26,15 +26,6 @@
     border-radius: 20px;
 }
 
-.divider{
-    margin-top: 30px;
-    margin-bottom: 30px;
-    width: 100%;
-    background-color: rgb(145, 145, 145);
-    height: 2px;
-    border-radius: 5px;
-}
-
 .github-section {
     display: flex; /* Enable flexbox layout */
     flex-direction: column; /* Stack items vertically */
