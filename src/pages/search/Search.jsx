@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import for navigation
 import MainLayout from "../../layouts/MainLayout";
 import colors from "../../theme/colors"; // Import colors
 
@@ -8,6 +9,8 @@ const Search = () => {
   const [distance, setDistance] = useState("Any");
   const [eventType, setEventType] = useState("All");
   const [filteredEvents, setFilteredEvents] = useState([]);
+  const navigate = useNavigate(); // Hook for navigation
+
 
   const events = [
     { id: 1, title: "Community Cleanup", location: "New York, NY", distance: "5 miles", type: "Volunteer", date: "Feb 20, 2025" },
@@ -41,6 +44,11 @@ const Search = () => {
     );
     setFilteredEvents(filtered);
   };
+
+    // **React Event: Navigate to event details page**
+    const handleEventClick = (eventId) => {
+        navigate(`/event/${eventId}`); // Redirects to event details page
+      };
 
   return (
     <MainLayout>
@@ -88,7 +96,11 @@ const Search = () => {
         {/* Event Results */}
         <div style={styles.eventList}>
           {(filteredEvents.length > 0 ? filteredEvents : events).map((event) => (
-            <div key={event.id} style={styles.eventCard}>
+            <div
+              key={event.id}
+              style={styles.eventCard}
+              onClick={() => handleEventClick(event.id)} // Navigate on click
+            >
               <h3 style={styles.eventTitle}>{event.title}</h3>
               <p style={styles.eventDetails}>{event.location} | {event.distance}</p>
               <p style={styles.eventType}>{event.type}</p>
@@ -181,6 +193,7 @@ const styles = {
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
     width: "50%",
     marginBottom: "15px",
+    cursor: "pointer"
   },
   eventTitle: {
     fontSize: "20px",

@@ -6,6 +6,7 @@ import SignUpForm from './pages/login/Signup';
 import Home from './pages/home/Home';
 import ForgotPasswordForm from './pages/login/forgotPassword';
 import Search from './pages/search/Search';
+import EventDetails from './pages/eventDetails/EventDetails';
 
 function NotFound() {
   return (
@@ -30,6 +31,7 @@ function App() {
         <Route path="/search" element={<Search />} />
         <Route path="/forgot-password" element={<ForgotPasswordForm />} />
         <Route path="/signup" element={<SignUpForm />} />
+        <Route path="/event/:id" element={<EventDetails />} />
       </Routes>
     </>
   );
