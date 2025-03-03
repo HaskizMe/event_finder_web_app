@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import color from '../theme/colors';
-
+import { AuthContext} from "../context/AuthContext";
 const MainNav = () => {
+  const { user, logout } = useContext(AuthContext); // Get user state & logout function
+
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -12,7 +14,12 @@ const MainNav = () => {
       <div style={styles.topBar}>
         <Container>
           <div style={styles.topBarInner}>
-            <Button as={Link} to="/login" style={styles.loginButton}>Log in</Button>
+            {user ? (
+              <Button onClick={logout} style={styles.loginButton}>Log out</Button>
+            ) : (
+              <Button as={Link} to="/login" style={styles.loginButton}>Log in</Button>
+
+            )}
             <Button as={Link} to="/signup" style={styles.signupButton}>Sign up</Button>
           </div>
         </Container>
@@ -36,6 +43,7 @@ const MainNav = () => {
             <Nav className="ms-auto">
               <Nav.Link as={Link} to="/" style={styles.navLink}>Home</Nav.Link>
               <Nav.Link as={Link} to="/search" style={styles.navLink}>Search Events</Nav.Link>
+              <Nav.Link as={Link} to="/my-events" style={styles.navLink}>My Events</Nav.Link>
               <Nav.Link as={Link} to="/about" style={styles.navLink}>About</Nav.Link>
             </Nav>
           </Navbar.Collapse>
