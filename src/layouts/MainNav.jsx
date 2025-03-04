@@ -18,7 +18,6 @@ const MainNav = () => {
               <Button onClick={logout} style={styles.loginButton}>Log out</Button>
             ) : (
               <Button as={Link} to="/login" style={styles.loginButton}>Log in</Button>
-
             )}
             <Button as={Link} to="/signup" style={styles.signupButton}>Sign up</Button>
           </div>

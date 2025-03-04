@@ -5,6 +5,15 @@ html, body {
   min-width: 770px;
 }
 
+:root {
+  --platinum: #D1D5D7;
+  --cool-gray: #8D99AE;
+  --anti-flash-light: #EDF2F4;
+  --rich-black: #001514;
+  --white: #FBFFFE;
+  --red: #d10000;
+}
+
 /* Navbar styles */
 .navbar {
   display: flex;

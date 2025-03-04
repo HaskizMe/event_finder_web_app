@@ -1,0 +1,134 @@
+.custom-tab {
+    background-color: var(--white) !important; /* Custom background color */
+    color: var(--black) !important; /* Custom text color */
+    border-radius: 5px;
+  }
+  
+  .custom-tab.active {
+    background-color: var(--red) !important;
+    color: var(--white) !important;
+  }
+
+  /* Main container */
+  .main-container {
+    padding: 30px;
+    background-color: var(--platinum);
+    min-height: 100vh;
+  }
+  
+  /* Heading styles */
+  .heading {
+    text-align: center;
+    font-size: 28px;
+    color: var(--rich-black);
+    margin-bottom: 20px;
+  }
+  
+  /* Search form */
+  .search-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  /* Search input */
+  .search-input {
+    width: 50%;
+    padding: 12px;
+    border-radius: 8px;
+    color: var(--rich-black);
+    background-color: var(--white);
+    border: 1px solid var(--red);
+    font-size: 16px;
+  }
+  
+  /* Buttons */
+  .search-button {
+    background-color: var(--red);
+    color: var(--white);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .clear-button {
+    background-color: var(--cool-gray);
+    color: var(--white);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  /* Filter section */
+  .filter-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .filter-input {
+    padding: 10px;
+    border-radius: 6px;
+    color: var(--rich-black);
+    border: 1px solid var(--cool-gray);
+    font-size: 14px;
+    width: 200px;
+    background-color: var(--white);
+  }
+  
+  .filter-select {
+    padding: 10px;
+    border-radius: 6px;
+    background-color: var(--white);
+    color: var(--rich-black);
+    border: 1px solid var(--cool-gray);
+    font-size: 14px;
+    width: 150px;
+  }
+  
+  /* Event List */
+  .event-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* Event Card */
+  .event-card {
+    background-color: var(--white);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 50%;
+    margin-bottom: 15px;
+    cursor: pointer;
+  }
+  
+  /* Event Title */
+  .event-title {
+    font-size: 20px;
+    color: var(--red);
+    margin-bottom: 5px;
+  }
+  
+  /* Event Details */
+  .event-details {
+    color: var(--rich-black);
+    font-size: 14px;
+  }
+  
+  .event-type {
+    font-size: 14px;
+    color: var(--cool-gray);
+  }
+  
+  .event-date {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--rich-black);
+  }

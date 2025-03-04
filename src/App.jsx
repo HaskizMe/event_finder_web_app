@@ -1,7 +1,6 @@
 import { Link, Route, Routes } from 'react-router-dom';
 import About from './pages/about/About';
 import './App.css';
-import LoginForm from './pages/login/Login';
 import Login from './auth/Login';
 import SignUpForm from './pages/login/Signup';
 import Home from './pages/home/Home';
