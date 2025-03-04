@@ -1,0 +1,41 @@
+.red-button{
+    background-color: var(--red);
+    color: var(--white);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+}
+  /* Event Card */
+.event-card {
+    background-color: var(--white);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 50%;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+  
+/* Event Title */
+.event-title {
+    font-size: 20px;
+    color: var(--red);
+    margin-bottom: 5px;
+}
+  
+/* Event Details */
+.event-details {
+    color: var(--rich-black);
+    font-size: 14px;
+}
+  
+.event-type {
+    font-size: 14px;
+    color: var(--cool-gray);
+}
+  
+.event-date {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--rich-black);
+}

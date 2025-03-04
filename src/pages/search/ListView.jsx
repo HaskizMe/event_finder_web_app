@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Search.css"
+import events from '../../data/fakeData'
+import EventCard from "../../components/EventCard";
 
 const ListView = () => {
 
@@ -10,14 +12,6 @@ const ListView = () => {
     const [eventType, setEventType] = useState("All");
     const [filteredEvents, setFilteredEvents] = useState([]);
     const navigate = useNavigate();
-
-
-    const events = [
-        { id: 1, title: "Community Cleanup", location: "New York, NY", distance: "5 miles", type: "Volunteer", date: "Feb 20, 2025" },
-        { id: 2, title: "Tech Meetup", location: "San Francisco, CA", distance: "10 miles", type: "Networking", date: "Mar 5, 2025" },
-        { id: 3, title: "Art Exhibition", location: "Chicago, IL", distance: "2 miles", type: "Culture", date: "Mar 15, 2025" },
-        { id: 4, title: "Music Festival", location: "Austin, TX", distance: "15 miles", type: "Entertainment", date: "Apr 10, 2025" },
-    ];
 
     // **React Event: onChange - Handles search input updates**
     const handleSearchChange = (e) => {
@@ -38,7 +32,7 @@ const ListView = () => {
         e.preventDefault(); // Prevents page refresh
         const filtered = events.filter(event =>
         event.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-        (location === "" || event.location.includes(location)) &&
+        (location === "" || events.location.includes(location)) &&
         (distance === "Any" || event.distance === distance) &&
         (eventType === "All" || event.type === eventType)
         );
@@ -94,16 +88,12 @@ const ListView = () => {
             {/* Event Results */}
             <div className="event-list">
             {(filteredEvents.length > 0 ? filteredEvents : events).map((event) => (
-                <div
-                key={event.id}
-                className="event-card"
-                onClick={() => handleEventClick(event.id)} // Navigate on click
-                >
-                <h3 className="event-title">{event.title}</h3>
-                <p className="event-details">{event.location} | {event.distance}</p>
-                <p className="event-type">{event.type}</p>
-                <p className="event-date">{event.date}</p>
-                </div>
+
+                <EventCard
+                    key={event.id}
+                    onClick={handleEventClick} // ✅ Pass function reference
+                    event={event} // ✅ Pass event object
+                />
             ))}
             </div>
         </>
