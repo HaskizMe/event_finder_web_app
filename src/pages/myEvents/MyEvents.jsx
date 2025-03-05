@@ -6,21 +6,20 @@ import RedButton from '../../components/RedButton';
 
 const MyEvents = () => {
     const navigate = useNavigate();
-
-    // ✅ Filter only attending events
     const savedEvents = events.filter((e) => e.attending);
 
 
     return (
         <MainLayout title="My Events">
 
-            <div style={{display: "flex", justifyContent: "right", margin: "20px 50px"}}>
+            {/* <div style={{display: "flex", justifyContent: "right", margin: "20px 50px"}}>
                 <RedButton
                     width={"200px"}
                     height={"50px"}
+                    onClick={() => navigate("/create-event")}
                 >
                     Create Event <i className="fas fa-calendar-plus" style={{ paddingLeft: "5px" }}></i></RedButton>
-            </div>
+            </div> */}
             <div style={{ 
                 display: "flex", 
                 flexDirection: "column",
@@ -42,7 +41,7 @@ const MyEvents = () => {
                 ) : (
                     <p style={{ fontSize: "20px", color: "gray", fontWeight: "bold" }}>
                         No saved events
-                    </p> // ✅ Centered message when no events exist
+                    </p>
                 )}
             </div>
         </MainLayout>

@@ -39,3 +39,10 @@
     font-weight: bold;
     color: var(--rich-black);
 }
+
+  /* Main container */
+  .base-container {
+    padding: 30px;
+    background-color: var(--platinum);
+    min-height: 100vh;
+  }
