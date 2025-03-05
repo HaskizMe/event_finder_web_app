@@ -71,15 +71,6 @@ const CreateEvent = () => {
                     country: place.properties.country || "",
                 };
             
-                console.log("Before update - prev address:", prevData.address);
-                console.log("After update - new address:", newData.address);
-            
-                if (prevData.address === newData.address) {
-                    console.log("State not updating because address is the same.");
-                } else {
-                    console.log("State updated successfully!");
-                }
-            
                 return newData;
             });
 

@@ -11,7 +11,7 @@ const EventDetails = () => {
 
   function handleClick(attendingStatus){
     console.log(event.id);
-    event.attending = !event.attending; // ✅ Update event object directly
+    event.attending = !event.attending;
     setAttending(attendingStatus);
     console.log(events);
   }
