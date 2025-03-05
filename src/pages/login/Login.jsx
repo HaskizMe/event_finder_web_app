@@ -1,80 +1,84 @@
-import { Link } from "react-router-dom";
-import MainLayout from "../../layouts/MainLayout";
-import color from '../../theme/colors'
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable no-unused-vars */
+import { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import MainLayout from '../../layouts/MainLayout';
+import colors from '../../theme/colors';
 
-const LoginForm = () => {
-  return (
-    <MainLayout>
-    <div style={styles.container}>
-      <div style={styles.card}>
-        <h2 style={styles.title}>LOGIN</h2>
-        <input type="email" placeholder="EMAIL" style={styles.input} />
-        <input type="password" placeholder="PASSWORD" style={styles.input} />
-        <Link to='/search'>
-            <button style={styles.button}>LOGIN</button>
-        </Link>
-        <div style={styles.footer}>
-          <Link to="/signup" style={styles.link}>SIGN UP</Link>
-          <Link to="/forgot-password" style={styles.link}>FORGOT PASSWORD</Link>
-        </div>
-      </div>
-    </div>
-    </MainLayout>
-  );
+function login() {
+    const {login, user} = useContext(AuthContext);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    //const [isLoggedIn, login] = useState(false);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if(user){
+            // Need to add an admin page or a page that only logged in users can access
+            console.log('User logged in');
+            navigate('/');
+        }
+    }, [user, navigate]);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if(!email || !password){
+            //alert('Please enter email and password');
+            //setError('Please enter email and password');
+        } 
+
+        const userData = { email };
+        login(userData); // Updates AuthContext
+
+        console.log('User logged in:', email);
+        navigate('/about'); // Redirect after login
+        
+    }
+
+    return (
+        <MainLayout title='Login | MyPage'>
+            <div style={{ 
+                display: "flex", 
+                justifyContent: "center", 
+                alignItems: "flex-start",
+                marginTop: "50px", 
+                marginBottom: "50px", 
+                height: "70vh"
+            }}>
+                <div className='card shadow-lg col-sm-6 col-md-3 p-4' 
+                    style={{ maxHeight: "500px", overflow: "auto" }}
+                >
+                    <h3 className="text-center mb-4">Login</h3>
+                    {error && <div className='alert alert-danger'>{error}</div>}
+                    <form onSubmit={handleSubmit}>
+                        <div className='mb-3'>
+                            <label className='form-label'>Email Address</label>
+                            <input
+                                type='email'
+                                className='form-control'
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder='Enter email'
+                            />
+                        </div>
+                        <div className='mb-3'>
+                            <label className='form-label'>Password</label>
+                            <input
+                                type='password'
+                                className='form-control'
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder='Enter password'
+                            />
+                        </div>
+                        <button type='submit' className='btn' style={{backgroundColor: colors.red, color: colors.white}}>Login</button>
+                    </form>
+                </div>
+            </div>
+        </MainLayout>
+    );
 };
 
-// Inline styles (like React Native)
-const styles = {
-  container: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100vh",
-    backgroundColor: "#f5f5f5",
-  },
-  card: {
-    backgroundColor: "white",
-    padding: "30px",
-    borderRadius: "10px",
-    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-    width: "350px",
-    textAlign: "center",
-  },
-  title: {
-    fontSize: "22px",
-    marginBottom: "20px",
-  },
-  input: {
-    width: "100%",
-    padding: "12px",
-    marginBottom: "10px",
-    borderRadius: "10px",
-    color: color.richBlack,
-    border: "none",
-    backgroundColor: "#f1f1f1",
-    fontSize: "16px",
-    textAlign: "left",
-  },
-  button: {
-    width: "100%",
-    padding: "12px",
-    backgroundColor: color.red, // Reddish-brown
-    color: "white",
-    fontSize: "16px",
-    border: "none",
-    borderRadius: "10px",
-    cursor: "pointer",
-  },
-  footer: {
-    display: "flex",
-    justifyContent: "space-between",
-    marginTop: "20px",
-  },
-  link: {
-    textDecoration: "none",
-    color: color.red,
-    fontSize: "14px",
-  },
-};
-
-export default LoginForm;
+export default login;

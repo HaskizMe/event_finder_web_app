@@ -1,12 +1,15 @@
 import { Link, Route, Routes } from 'react-router-dom';
 import About from './pages/about/About';
 import './App.css';
-import LoginForm from './pages/login/Login';
+import Login from './pages/login/Login';
 import SignUpForm from './pages/login/Signup';
 import Home from './pages/home/Home';
 import ForgotPasswordForm from './pages/login/forgotPassword';
 import Search from './pages/search/Search';
 import EventDetails from './pages/eventDetails/EventDetails';
+import MyEvents from './pages/myEvents/MyEvents';
+import ProtectedRoute from './auth/ProtectRoute';
+import CreateEvent from './pages/myEvents/CreateEvent';
 
 function NotFound() {
   return (
@@ -27,8 +30,31 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/" element={<Home />} />
         <Route path="*" element={<NotFound />} />
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/search" element={<Search />} />
+        {/* <Route path="/login" element={<LoginForm />} /> */}
+
+        {/* <Route element={<AuthRoute/>}/> */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/my-events" 
+            element={
+              <ProtectedRoute>
+                <MyEvents />
+              </ProtectedRoute>
+            } 
+          />
+        <Route path="/search" 
+            element={
+              <ProtectedRoute>
+                <Search />
+              </ProtectedRoute>
+            } 
+        />
+        <Route path="/create-event" 
+            element={
+              <ProtectedRoute>
+                <CreateEvent />
+              </ProtectedRoute>
+            } 
+        />
         <Route path="/forgot-password" element={<ForgotPasswordForm />} />
         <Route path="/signup" element={<SignUpForm />} />
         <Route path="/event/:id" element={<EventDetails />} />
