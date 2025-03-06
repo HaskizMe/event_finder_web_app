@@ -5,8 +5,7 @@ import colors from '../../theme/colors';
 import { AddressAutofill } from "@mapbox/search-js-react";
 import events from '../../data/fakeData';
 
-const ACCESS_TOKEN = "pk.eyJ1IjoiaGFza2l6bWUiLCJhIjoiY2x6NzRuZmVrMDVtYTJqcTh3dWJtMDJ4aSJ9.CvdjVwzUztffqsea37-RRQ"; // ✅ Replace with actual token
-let i = 0;
+const ACCESS_TOKEN = import.meta.env.VITE_MAP_BOX_API_KEY; // ✅ Replace with actual token
 const CreateEvent = () => {
     // const [address, setAddress] = useState("");
     // const [city, setCity] = useState("");

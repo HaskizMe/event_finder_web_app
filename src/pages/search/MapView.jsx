@@ -7,6 +7,9 @@ import '../../styles/styles.css';
 import RedButton from '../../components/RedButton';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import colors from '../../theme/colors';
+
+const API_KEY = import.meta.env.VITE_MAP_BOX_API_KEY;
+
 const INITIAL_CENTER = [
   -111.8910,
   40.7608  
@@ -22,7 +25,7 @@ const MapView = () => {
     const [zoom, setZoom] = useState(INITIAL_ZOOM)
 
     useEffect(() => {
-        mapboxgl.accessToken = 'pk.eyJ1IjoiaGFza2l6bWUiLCJhIjoiY2x6NzRuZmVrMDVtYTJqcTh3dWJtMDJ4aSJ9.CvdjVwzUztffqsea37-RRQ'
+        mapboxgl.accessToken = `${API_KEY}`;
         mapRef.current = new mapboxgl.Map({
             container: mapContainerRef.current,
             center: center,

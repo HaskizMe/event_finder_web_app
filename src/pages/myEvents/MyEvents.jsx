@@ -12,14 +12,14 @@ const MyEvents = () => {
     return (
         <MainLayout title="My Events">
 
-            <div style={{display: "flex", justifyContent: "right", margin: "20px 50px"}}>
+            {/* <div style={{display: "flex", justifyContent: "right", margin: "20px 50px"}}>
                 <RedButton
                     width={"200px"}
                     height={"50px"}
                     onClick={() => navigate("/create-event")}
                 >
                     Create Event <i className="fas fa-calendar-plus" style={{ paddingLeft: "5px" }}></i></RedButton>
-            </div>
+            </div> */}
             <div style={{ 
                 display: "flex", 
                 flexDirection: "column",
