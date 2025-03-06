@@ -5,8 +5,7 @@ import colors from '../../theme/colors';
 import { AddressAutofill } from "@mapbox/search-js-react";
 import events from '../../data/fakeData';
 
-const ACCESS_TOKEN = "pk.eyJ1IjoiaGFza2l6bWUiLCJhIjoiY2x6NzRuZmVrMDVtYTJqcTh3dWJtMDJ4aSJ9.CvdjVwzUztffqsea37-RRQ"; // ✅ Replace with actual token
-
+const ACCESS_TOKEN = import.meta.env.VITE_MAP_BOX_API_KEY; // ✅ Replace with actual token
 const CreateEvent = () => {
     // const [address, setAddress] = useState("");
     // const [city, setCity] = useState("");
@@ -44,6 +43,7 @@ const CreateEvent = () => {
     };
 
     const handleChange = (e) => {
+        console.log("here");
         setEventData({
             ...eventData,
             [e.target.name]: e.target.value,
@@ -55,34 +55,31 @@ const CreateEvent = () => {
 
         if (res.features.length > 0) {
             console.log(res);
-            const place = res.features[0]; // Get first suggested place
+            const place = res.features[0];
             const context = place.context || [];
 
             console.log("maybe here: ", place.properties.address_line1)
 
-            //setAddress("test");
             setEventData((prevData) => {
                 const newData = {
                     ...prevData,
-                    address: place.properties.address_line1,
-                    city: context.find(c => c.id.includes("place"))?.text || prevData.city,
-                    state: context.find(c => c.id.includes("region"))?.text || prevData.state,
-                    zip: context.find(c => c.id.includes("postcode"))?.text || prevData.zip,
-                    country: context.find(c => c.id.includes("country"))?.text || prevData.country,
+                    address: place.properties.address_line1 || "", // Ensure it's a string
+                    city: place.properties.address_level12 || "",
+                    state: place.properties.region_code || "",
+                    zip: place.properties.postcode || "",
+                    country: place.properties.country || "",
                 };
-                if (prevData.address === newData.address) {
-                    console.log("State not updating because address is the same.");
-                } else {
-                    console.log("State updated successfully!");
-                }
+            
                 return newData;
             });
+
+            
         }
     };
 
     useEffect(() => {
-        console.log("Updated Address (AFTER state update):", eventData.address, eventData.city, eventData.state, eventData.zip, eventData.country);
-    }, [eventData]);  
+        console.log("Updated Address", eventData.address, eventData.city, eventData.country, eventData.date, eventData.description, eventData.state, eventData.title, eventData.type, eventData.zip);
+    }, [eventData]); 
 
     return (
         <MainLayout title="Create Event">
@@ -117,11 +114,65 @@ const CreateEvent = () => {
                                     autoComplete="address-line1"
                                     required
                                 />
+
+                                <div className="row mb-3">
+                                    <div className="col">
+                                        <label className="form-label">City</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            name="city"
+                                            // value={eventData.city}
+                                            // onChange={handleChange}
+                                            autoComplete="address-level2"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="col">
+                                        <label className="form-label">State</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            name="state"
+                                            // value={eventData.state}
+                                            // onChange={handleChange}
+                                            autoComplete="address-level1"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="row mb-3">
+                                    <div className="col">
+                                        <label className="form-label">ZIP Code</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            name="zip"
+                                            // value={eventData.zip}
+                                            // onChange={handleChange}
+                                            autoComplete="postal-code"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="col">
+                                        <label className="form-label">Country</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            name="country"
+                                            // value={eventData.country}
+                                            // onChange={handleChange}
+                                            autoComplete="country"
+                                            required
+                                        />
+                                    </div>
+                                </div>
                             </AddressAutofill>
                         </div>
 
                         {/* ✅ City, State, ZIP, Country Fields - Autofilled but Editable */}
-                        <div className="row mb-3">
+                        {/* <div className="row mb-3">
                             <div className="col">
                                 <label className="form-label">City</label>
                                 <input
@@ -146,9 +197,9 @@ const CreateEvent = () => {
                                     required
                                 />
                             </div>
-                        </div>
+                        </div> */}
 
-                        <div className="row mb-3">
+                        {/* <div className="row mb-3">
                             <div className="col">
                                 <label className="form-label">ZIP Code</label>
                                 <input
@@ -173,7 +224,7 @@ const CreateEvent = () => {
                                     required
                                 />
                             </div>
-                        </div>
+                        </div> */}
 
                         {/* Date */}
                         <div className="mb-3">

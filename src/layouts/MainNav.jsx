@@ -20,7 +20,7 @@ const MainNav = () => {
           const { latitude, longitude } = position.coords;
           try {
             const response = await fetch(
-              `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`
+              `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=imperial`
             );
             const data = await response.json();
             setWeather({
@@ -54,7 +54,7 @@ const MainNav = () => {
               {error ? (
                 <span>{error}</span>
               ) : weather ? (
-                <span>🌤 {weather.city}: {weather.temp}°C {weather.condition}</span>
+                <span>🌤 {weather.city}: {weather.temp}°F {weather.condition}</span>
               ) : (
                 <span>Loading weather...</span>
               )}
