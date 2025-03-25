@@ -42,7 +42,7 @@ const ListView = () => {
     // **React Event: Navigate to event details page**
     const handleEventClick = (eventId) => {
         navigate(`/event/${eventId}`); // Redirects to event details page
-      };
+    };
 
 
     return (

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import MainNav from "./MainNav";
 import MainFooter from "./MainFooter";
 import { useEffect } from "react";

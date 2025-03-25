@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import MainLayout from '../../layouts/MainLayout';
 import colors from '../../theme/colors';
 
-function login() {
+function Login() {
     const {login, user} = useContext(AuthContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -22,18 +22,19 @@ function login() {
         }
     }, [user, navigate]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
         if(!email || !password){
             //alert('Please enter email and password');
             //setError('Please enter email and password');
         } 
 
-        const userData = { email };
-        login(userData); // Updates AuthContext
+        const userData = { email, password};
+        await login(userData); // Updates AuthContext
 
-        console.log('User logged in:', email);
-        navigate('/about'); // Redirect after login
+        //console.log('User logged in:', email, password);
+        //navigate('/about'); // Redirect after login
         
     }
 
@@ -81,4 +82,4 @@ function login() {
     );
 };
 
-export default login;
+export default Login;
