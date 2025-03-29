@@ -1,50 +1,46 @@
-/* eslint-disable react/prop-types */
-import { createContext, useState } from "react";
+// context/AuthContext.js
 
-// Create the authentication context
+import { createContext, useEffect, useState } from 'react';
+
 export const AuthContext = createContext();
 
-// AuthProvider Component to manage authentication state
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
+
+  // Check localStorage on first load
+  useEffect(() => {
+    const token = localStorage.getItem("jwt_token");
+    if (token) {
+      console.log("Token found in localStorage");
+      setUser({ token });
+    }
+  }, []);
 
   const login = async (userData) => {
-    console.log("User data", userData);
-    const response = await fetch('http://localhost:8000/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username: userData.email, password: userData.password }),
+    const response = await fetch("http://localhost:8000/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: userData.email,
+        password: userData.password,
+      }),
     });
 
-    if(!response.ok){
-      const message = `An error has occured: ${response.status}`;
-      throw new Error(message);
-    } else if(response.ok){
-      console.log("YAY we logged in!");
-    } else {
-      console.log("response", response.status);
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.detail || "Login failed");
     }
-  
-    console.log("response", response.status);
-    const now = new Date();
-    const fakeToken = { 
-      email: userData.email, 
-      password: userData.password, 
-      expiration: now.setHours(now.getHours() + 1) 
-    };
-  
-    localStorage.setItem("token", JSON.stringify(fakeToken));
-    setUser(userData);
-    setToken(fakeToken);
-    console.log("User logged in:", userData);
+
+    const data = await response.json();
+    localStorage.setItem("jwt_token", data.jwt_token);
+    setUser({ token: data.jwt_token });
   };
+
   const logout = () => {
+    localStorage.removeItem("jwt_token");
     setUser(null);
-    console.log("User logged out");
   };
+
   return (
     <AuthContext.Provider value={{ user, login, logout }}>
       {children}

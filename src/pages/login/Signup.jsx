@@ -1,76 +1,146 @@
 import { Link } from "react-router-dom";
 import MainLayout from "../../layouts/MainLayout";
+import { useState, useEffect, useContext } from 'react';
 import { MdArrowBack } from 'react-icons/md';
-import color from '../../theme/colors'
+import colors from '../../theme/colors';
+
 
 const SignUpForm = () => {
+    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [error, setError] = useState('');
+    const [isSuccess, setIsSuccess] = useState(false);
+
+    const createAccount = async (userData) => {
+      try {
+        const response = await fetch("http://localhost:8000/api/signup/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(userData)
+        });
+    
+        if (!response.ok) {
+          const errorData = await response.json();
+          setError(errorData.detail || "Signup failed");
+          setIsSuccess(false);
+          return;
+        }
+    
+        const data = await response.json();
+        console.log("Signup success, JWT token:", data.jwt_token);
+    
+        setError("User created!");
+        setIsSuccess(true);
+        // Optionally store token in localStorage or redirect
+        // localStorage.setItem('jwt_token', data.jwt_token);
+        // navigate('/');
+      } catch (err) {
+        setError("Signup failed: " + err.message);
+        setIsSuccess(false);
+      }
+    }
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+
+      if(!email || !password){
+          alert('Please enter email and password');
+          setError('Please enter email and password');
+          setIsSuccess(false);
+      } else if(!username){
+          alert('Please enter a username');
+          setError('Please enter a username');
+          setIsSuccess(false);
+      } else if(password !== confirmPassword){
+          alert('Passwords do not match');
+          setError('Passwords do not match');
+          setIsSuccess(false);
+      } else {
+          const userData = {
+            email: email.toLowerCase().trim(),
+            username: username.trim(),
+            password
+          };
+          await createAccount(userData);
+          setEmail('');
+          setUsername('');
+          setPassword('');
+          setConfirmPassword('');
+      }
+      
+  }
+
+
   return (
     <MainLayout>
-        <div style={styles.container}>
-        <div style={styles.card}>
-            <Link to="/login" style={styles.backButton}><MdArrowBack /></Link>
-            <h2 style={styles.title}>SIGN UP</h2>
-            <input type="email" placeholder="EMAIL" style={styles.input} />
-            <input type="password" placeholder="PASSWORD" style={styles.input} />
-            <input type="password" placeholder="CONFIRM PASSWORD" style={styles.input} />
-            <Link to='/login'>
-                <button style={styles.button}>SIGN UP</button>
-            </Link>
-        </div>
-        </div>
+      <div style={{ 
+          display: "flex", 
+          justifyContent: "center", 
+          alignItems: "flex-start",
+          marginTop: "50px", 
+          marginBottom: "50px", 
+          height: "70vh"
+      }}>
+          <div className='card shadow-lg col-sm-6 col-md-3 p-4' 
+              style={{ maxHeight: "700px", overflow: "auto" }}
+          >
+              <h3 className="text-center mb-4">Create Account</h3>
+              {error && (
+                <div className={`alert ${isSuccess ? 'alert-success' : 'alert-danger'}`}>
+                  {error}
+                </div>
+              )}
+              <form onSubmit={handleSubmit}>
+                  <div className='mb-3'>
+                      <label className='form-label'>Email Address</label>
+                      <input
+                          type='email'
+                          className='form-control'
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder='Enter email'
+                      />
+                  </div>
+                  <div className='mb-3'>
+                      <label className='form-label'>Username</label>
+                      <input
+                          type='text'
+                          className='form-control'
+                          value={username}
+                          onChange={(e) => setUsername(e.target.value)}
+                          placeholder='Enter username'
+                      />
+                  </div>
+                  <div className='mb-3'>
+                      <label className='form-label'>Password</label>
+                      <input
+                          type='password'
+                          className='form-control'
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          placeholder='Enter password'
+                      />
+                  </div>
+                  <div className='mb-3'>
+                      <label className='form-label'>Confirm Password</label>
+                      <input
+                          type='password'
+                          className='form-control'
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          placeholder='Confirm password'
+                      />
+                  </div>
+                  <button type='submit' className='btn' style={{backgroundColor: colors.red, color: colors.white}}>Sign Up</button>
+              </form>
+          </div>
+      </div>
     </MainLayout>
   );
-};
-
-const styles = {
-  container: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: '100vh'
-  },
-  card: {
-    backgroundColor: "white",
-    padding: "30px",
-    borderRadius: "10px",
-    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-    width: "350px",
-    textAlign: "center",
-    position: "relative",
-  },
-  backButton: {
-    position: "absolute",
-    left: "20px",
-    top: "15px",
-    fontSize: "20px",
-    textDecoration: "none",
-    color: "black",
-  },
-  title: {
-    fontSize: "22px",
-    marginBottom: "20px",
-  },
-  input: {
-    width: "100%",
-    padding: "12px",
-    marginBottom: "10px",
-    borderRadius: "10px",
-    border: "none",
-    backgroundColor: "#f1f1f1",
-    fontSize: "16px",
-    textAlign: "left",
-    color: 'black'
-  },
-  button: {
-    width: "100%",
-    padding: "12px",
-    backgroundColor: color.red,
-    color: "white",
-    fontSize: "16px",
-    border: "none",
-    borderRadius: "10px",
-    cursor: "pointer",
-  },
 };
 
 export default SignUpForm;

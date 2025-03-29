@@ -26,8 +26,8 @@ function Login() {
         e.preventDefault();
 
         if(!email || !password){
-            //alert('Please enter email and password');
-            //setError('Please enter email and password');
+            alert('Please enter email and password');
+            setError('Please enter email and password');
         } 
 
         const userData = { email, password};
