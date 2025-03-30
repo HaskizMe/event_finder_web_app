@@ -49,7 +49,7 @@ const ListView = () => {
     };
 
     const fetchEvents = async () => {
-        
+
         const response = await fetch("http://localhost:8000/api/events", {
             method: "GET",
             headers: {
@@ -59,6 +59,9 @@ const ListView = () => {
         });
 
         if(!response.ok){
+            if(response.status === 401){
+                logout();
+            }
             throw new Error("Failed to fetch events");
         }
 
@@ -86,7 +89,7 @@ const ListView = () => {
             <form className="search-form" onSubmit={handleSearchSubmit}>
             <input
                 type="text"
-                placeholder="Search for events..."
+                placeholder="Search for events by title..."
                 value={searchTerm}
                 onChange={handleSearchChange} // Event 1: onChange
                 className="search-input"
@@ -95,7 +98,7 @@ const ListView = () => {
             <button type="button" className="clear-button" onClick={handleClear}>Clear</button> {/* Event 2: onClick */}
             </form>
 
-            <div className="filter-container">
+            {/* <div className="filter-container">
             <input
                 type="text"
                 placeholder="Enter location..."
@@ -118,7 +121,7 @@ const ListView = () => {
                 <option>Culture</option>
                 <option>Entertainment</option>
             </select>
-            </div>
+            </div> */}
 
             {/* Event Results */}
             <div className="event-list">

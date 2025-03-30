@@ -2,13 +2,15 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import MainLayout from "../../layouts/MainLayout";
 import colors from "../../theme/colors";
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from "../../context/AuthContext";
 
 const EventDetails = () => {
   const { id } = useParams();
-  const { user } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
   const [event, setEvent] = useState(null);
   const [attending, setAttending] = useState(false);
+  const navigate = useNavigate();
 
   // Fetch event details from backend
   useEffect(() => {
@@ -68,6 +70,33 @@ const EventDetails = () => {
     }
   };
 
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this event?");
+    if (!confirmDelete) return;
+  
+    try {
+      const response = await fetch(`http://localhost:8000/api/event/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.jwt_token}`,
+        },
+      });
+  
+      if (!response.ok) {
+        if(response.status === 401){
+          logout();
+        }
+        throw new Error("Failed to delete event");
+      }
+      alert("Event deleted!");
+      navigate('/search');
+    } catch (err) {
+      console.error("Delete failed:", err);
+      alert("Something went wrong.");
+    }
+  };
+
   if (!event) {
     return (
       <MainLayout>
@@ -80,6 +109,13 @@ const EventDetails = () => {
     <MainLayout>
       <div style={styles.container}>
         <div style={styles.card}>
+          {/* Delete button only if user is the event owner */}
+          {event.user_id === user.user_id && (
+            <button style={styles.deleteButton} onClick={handleDelete}>
+              Delete Event
+            </button>
+          )}
+
           <h1 style={styles.title}>{event.title}</h1>
 
           <button
@@ -94,10 +130,7 @@ const EventDetails = () => {
               <strong style={styles.sectionTitle}>Start Date:</strong> {event.start_date}
             </p>
             <p style={styles.details}>
-              <strong style={styles.sectionTitle}>End Date:</strong> {event.end_date}
-            </p>
-            <p style={styles.details}>
-              <strong style={styles.sectionTitle}>Location:</strong> {event.address}
+              <strong style={styles.sectionTitle}>Location:</strong> {event.address + ", " + event.city + ", " + event.state + " " + event.zip + ", " + event.country}
             </p>
             <p style={styles.details}>
               <strong style={styles.sectionTitle}>Type:</strong> {event.type}
@@ -105,7 +138,7 @@ const EventDetails = () => {
           </div>
 
           <div style={styles.descriptionSection}>
-            <h2 style={styles.sectionTitle}>📖 Description</h2>
+            <h2 style={styles.sectionTitle}>Description</h2>
             <p style={styles.description}>{event.description}</p>
           </div>
         </div>
@@ -123,12 +156,26 @@ const styles = {
     backgroundColor: colors.platinum,
     padding: "20px",
   },
+
+  deleteButton: {
+    position: "absolute",
+    top: "20px",
+    right: "20px",
+    backgroundColor: colors.red,
+    color: colors.white,
+    border: "none",
+    padding: "6px 12px",
+    borderRadius: "6px",
+    cursor: "pointer",
+    fontWeight: "bold",
+  },
   card: {
+    position: "relative", // ✅ Add this line
     backgroundColor: colors.white,
     padding: "30px",
     borderRadius: "12px",
     boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-    maxWidth: "600px",
+    maxWidth: "800px",
     width: "100%",
     textAlign: "center",
   },

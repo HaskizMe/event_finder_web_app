@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 import color from '../theme/colors';
 import { AuthContext } from "../context/AuthContext";
 
-const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
-
 const MainNav = () => {
   const { user, logout } = useContext(AuthContext); // Get user state & logout function
   const [expanded, setExpanded] = useState(false);
@@ -13,34 +11,48 @@ const MainNav = () => {
   const [error, setError] = useState(null); // 🔹 Handle geolocation errors
 
   useEffect(() => {
-    // Fetch user's current location
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const { latitude, longitude } = position.coords;
-          try {
-            const response = await fetch(
-              `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=imperial`
-            );
-            const data = await response.json();
-            setWeather({
-              temp: Math.round(data.main.temp),
-              condition: data.weather[0].main,
-              city: data.name
-            });
-          } catch (err) {
-            console.error("Weather API error:", err);
-            setError("Weather unavailable");
-          }
-        },
-        (error) => {
-          console.error("Geolocation error:", error);
-          setError("Location access denied");
+    const fetchWeather = async () => {
+      try {
+        // 1. Get the weather API token from your backend
+        const tokenRes = await fetch("http://localhost:8000/api/keys/weather");
+        const tokenData = await tokenRes.json();
+        const API_KEY = tokenData;
+  
+        // 2. Get user location
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            async (position) => {
+              const { latitude, longitude } = position.coords;
+              try {
+                const response = await fetch(
+                  `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=imperial`
+                );
+                const data = await response.json();
+                setWeather({
+                  temp: Math.round(data.main.temp),
+                  condition: data.weather[0].main,
+                  city: data.name,
+                });
+              } catch (err) {
+                console.error("Weather API error:", err);
+                setError("Weather unavailable");
+              }
+            },
+            (error) => {
+              console.error("Geolocation error:", error);
+              setError("Location access denied");
+            }
+          );
+        } else {
+          setError("Geolocation not supported");
         }
-      );
-    } else {
-      setError("Geolocation not supported");
-    }
+      } catch (err) {
+        console.error("Error fetching weather token:", err);
+        setError("Weather token error");
+      }
+    };
+  
+    fetchWeather();
   }, []);
 
   return (
@@ -92,6 +104,7 @@ const MainNav = () => {
             <Nav className="ms-auto">
               <Nav.Link as={Link} to="/" style={styles.navLink}>Home</Nav.Link>
               <Nav.Link as={Link} to="/search" style={styles.navLink}>Search Events</Nav.Link>
+              <Nav.Link as={Link} to="/saved-events" style={styles.navLink}>Saved Events</Nav.Link>
               <Nav.Link as={Link} to="/my-events" style={styles.navLink}>My Events</Nav.Link>
               <Nav.Link as={Link} to="/about" style={styles.navLink}>About</Nav.Link>
             </Nav>
