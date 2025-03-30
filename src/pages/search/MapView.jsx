@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useContext } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { useNavigate } from "react-router-dom";
 import events from '../../data/fakeData';
@@ -7,8 +7,8 @@ import '../../styles/styles.css';
 import RedButton from '../../components/RedButton';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import colors from '../../theme/colors';
+import { AuthContext } from "../../context/AuthContext";
 
-const API_KEY = import.meta.env.VITE_MAP_BOX_API_KEY;
 
 const INITIAL_CENTER = [
   -111.8910,
@@ -21,11 +21,12 @@ const MapView = () => {
     const navigate = useNavigate();
     const mapRef = useRef();
     const mapContainerRef = useRef();
-    const [center, setCenter] = useState(INITIAL_CENTER)
-    const [zoom, setZoom] = useState(INITIAL_ZOOM)
+    const [center, setCenter] = useState(INITIAL_CENTER);
+    const [zoom, setZoom] = useState(INITIAL_ZOOM);
+    const { user, logout } = useContext(AuthContext);
 
     useEffect(() => {
-        mapboxgl.accessToken = `${API_KEY}`;
+        mapboxgl.accessToken = `${user.mapbox_token}`;
         mapRef.current = new mapboxgl.Map({
             container: mapContainerRef.current,
             center: center,

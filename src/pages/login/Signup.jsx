@@ -35,9 +35,6 @@ const SignUpForm = () => {
     
         setError("User created!");
         setIsSuccess(true);
-        // Optionally store token in localStorage or redirect
-        // localStorage.setItem('jwt_token', data.jwt_token);
-        // navigate('/');
       } catch (err) {
         setError("Signup failed: " + err.message);
         setIsSuccess(false);

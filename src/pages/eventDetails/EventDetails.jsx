@@ -1,20 +1,72 @@
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import MainLayout from "../../layouts/MainLayout";
 import colors from "../../theme/colors";
-import events from "../../data/fakeData";
+import { AuthContext } from "../../context/AuthContext";
 
 const EventDetails = () => {
   const { id } = useParams();
-  const event = events.find((e) => e.id === Number(id));
-  const [attending, setAttending] = useState(event.attending);
+  const { user } = useContext(AuthContext);
+  const [event, setEvent] = useState(null);
+  const [attending, setAttending] = useState(false);
 
-  function handleClick(attendingStatus){
-    console.log(event.id);
-    event.attending = !event.attending;
-    setAttending(attendingStatus);
-    console.log(events);
-  }
+  // Fetch event details from backend
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const response = await fetch(`http://localhost:8000/api/event/${id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user?.jwt_token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch event");
+        }
+
+        const data = await response.json();
+        setEvent(data);
+
+        // Check if current user is already attending
+        if (data.attendees?.includes(user.user_id)) {
+          console.log("User is attending");
+          setAttending(true);
+        } else {
+          console.log("User is not attending");
+          //setAttending(false);
+        }
+      } catch (error) {
+        console.error("Error loading event:", error);
+      }
+    };
+
+    if (user?.jwt_token) {
+      fetchEvent();
+    }
+  }, [id, user]);
+
+  const handleClick = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/event/${id}/attend`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.jwt_token}`,
+        },
+        body: JSON.stringify({ attending: !attending }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update attendance");
+      }
+
+      setAttending((prev) => !prev);
+    } catch (error) {
+      console.error("Attendance toggle failed:", error);
+    }
+  };
 
   if (!event) {
     return (
@@ -28,25 +80,30 @@ const EventDetails = () => {
     <MainLayout>
       <div style={styles.container}>
         <div style={styles.card}>
-          {/* Event Title */}
           <h1 style={styles.title}>{event.title}</h1>
 
-          {/* Attending Button */}
-          <button 
-            style={attending ? styles.attendingButtonActive : styles.attendingButton} 
-            onClick={() => handleClick(!attending)}
+          <button
+            style={attending ? styles.attendingButtonActive : styles.attendingButton}
+            onClick={handleClick}
           >
             {attending ? "Attending ✔" : "Attend"}
           </button>
 
-          {/* Event Details */}
           <div style={styles.detailsSection}>
-            <p style={styles.details}><strong style={styles.sectionTitle}>Date:</strong> {event.date}</p>
-            <p style={styles.details}><strong style={styles.sectionTitle}>Location:</strong> {event.address}</p>
-            <p style={styles.details}><strong style={styles.sectionTitle}>Type:</strong> {event.type}</p>
+            <p style={styles.details}>
+              <strong style={styles.sectionTitle}>Start Date:</strong> {event.start_date}
+            </p>
+            <p style={styles.details}>
+              <strong style={styles.sectionTitle}>End Date:</strong> {event.end_date}
+            </p>
+            <p style={styles.details}>
+              <strong style={styles.sectionTitle}>Location:</strong> {event.address}
+            </p>
+            <p style={styles.details}>
+              <strong style={styles.sectionTitle}>Type:</strong> {event.type}
+            </p>
           </div>
 
-          {/* Description Section */}
           <div style={styles.descriptionSection}>
             <h2 style={styles.sectionTitle}>📖 Description</h2>
             <p style={styles.description}>{event.description}</p>

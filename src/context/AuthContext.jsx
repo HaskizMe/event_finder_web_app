@@ -1,5 +1,4 @@
-// context/AuthContext.js
-
+/* eslint-disable react/prop-types */
 import { createContext, useEffect, useState } from 'react';
 
 export const AuthContext = createContext();
@@ -9,10 +8,32 @@ export const AuthProvider = ({ children }) => {
 
   // Check localStorage on first load
   useEffect(() => {
-    const token = localStorage.getItem("jwt_token");
+    const token = localStorage.getItem("token");
+  
     if (token) {
-      console.log("Token found in localStorage");
-      setUser({ token });
+      // Fetch full user data from /me endpoint
+      const fetchUser = async () => {
+        try {
+          const response = await fetch("http://localhost:8000/api/me", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+  
+          if (!response.ok) {
+            throw new Error("User not found");
+          }
+  
+          const data = await response.json();
+          setUser(data);
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+          localStorage.removeItem("token");
+          setUser(null);
+        }
+      };
+  
+      fetchUser();
     }
   }, []);
 
@@ -28,16 +49,17 @@ export const AuthProvider = ({ children }) => {
 
     if (!response.ok) {
       const errorData = await response.json();
+      alert("Incorrect Credentials");
       throw new Error(errorData.detail || "Login failed");
     }
 
     const data = await response.json();
-    localStorage.setItem("jwt_token", data.jwt_token);
-    setUser({ token: data.jwt_token });
+    localStorage.setItem("token", data.jwt_token);
+    setUser(data);
   };
 
   const logout = () => {
-    localStorage.removeItem("jwt_token");
+    localStorage.removeItem("token");
     setUser(null);
   };
 

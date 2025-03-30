@@ -1,16 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Search.css"
-import events from '../../data/fakeData'
+// import events from '../../data/fakeData'
 import EventCard from "../../components/EventCard";
+import { AuthContext } from "../../context/AuthContext";
+
 
 const ListView = () => {
 
+    const { user, logout } = useContext(AuthContext); // Get user state & logout function
     const [searchTerm, setSearchTerm] = useState("");
     const [location, setLocation] = useState("");
     const [distance, setDistance] = useState("Any");
     const [eventType, setEventType] = useState("All");
     const [filteredEvents, setFilteredEvents] = useState([]);
+    const [events, setEvents] = useState([]);
     const navigate = useNavigate();
 
     // **React Event: onChange - Handles search input updates**
@@ -43,6 +47,37 @@ const ListView = () => {
     const handleEventClick = (eventId) => {
         navigate(`/event/${eventId}`); // Redirects to event details page
     };
+
+    const fetchEvents = async () => {
+        
+        const response = await fetch("http://localhost:8000/api/events", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${user.jwt_token}`,
+            },
+        });
+
+        if(!response.ok){
+            throw new Error("Failed to fetch events");
+        }
+
+        const fetchedEvents = await response.json();
+        setEvents(fetchedEvents.results);
+    }
+
+    useEffect(() => {
+        const run = async () => {
+          try {
+            await fetchEvents();
+          } catch (err) {
+            console.error("Error fetching events:", err);
+          }
+        };
+      
+        run();
+      }, []);
+        
 
 
     return (
@@ -91,8 +126,8 @@ const ListView = () => {
 
                 <EventCard
                     key={event.id}
-                    onClick={handleEventClick} // ✅ Pass function reference
-                    event={event} // ✅ Pass event object
+                    onClick={handleEventClick} // Pass function reference
+                    event={event} // Pass event object
                 />
             ))}
             </div>
