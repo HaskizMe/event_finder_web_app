@@ -10,6 +10,7 @@ import EventDetails from './pages/eventDetails/EventDetails';
 import MyEvents from './pages/myEvents/MyEvents';
 import ProtectedRoute from './auth/ProtectRoute';
 import CreateEvent from './pages/myEvents/CreateEvent';
+import SavedEvents from './pages/savedEvents/SavedEvents';
 
 function NotFound() {
   return (
@@ -52,6 +53,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <CreateEvent />
+              </ProtectedRoute>
+            } 
+        />
+
+        <Route path="/saved-events" 
+            element={
+              <ProtectedRoute>
+                <SavedEvents />
               </ProtectedRoute>
             } 
         />

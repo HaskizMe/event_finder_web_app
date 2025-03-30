@@ -26,16 +26,12 @@ function Login() {
         e.preventDefault();
 
         if(!email || !password){
-            //alert('Please enter email and password');
-            //setError('Please enter email and password');
-        } 
-
-        const userData = { email, password};
-        await login(userData); // Updates AuthContext
-
-        //console.log('User logged in:', email, password);
-        //navigate('/about'); // Redirect after login
-        
+            alert('Please enter email and password');
+            setError('Please enter email and password');
+        } else {
+            const userData = { email, password};
+            await login(userData);
+        }
     }
 
     return (

@@ -1,16 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Search.css"
-import events from '../../data/fakeData'
+// import events from '../../data/fakeData'
 import EventCard from "../../components/EventCard";
+import { AuthContext } from "../../context/AuthContext";
+
 
 const ListView = () => {
 
+    const { user, logout } = useContext(AuthContext); // Get user state & logout function
     const [searchTerm, setSearchTerm] = useState("");
     const [location, setLocation] = useState("");
     const [distance, setDistance] = useState("Any");
     const [eventType, setEventType] = useState("All");
     const [filteredEvents, setFilteredEvents] = useState([]);
+    const [events, setEvents] = useState([]);
     const navigate = useNavigate();
 
     // **React Event: onChange - Handles search input updates**
@@ -44,6 +48,40 @@ const ListView = () => {
         navigate(`/event/${eventId}`); // Redirects to event details page
     };
 
+    const fetchEvents = async () => {
+
+        const response = await fetch("http://localhost:8000/api/events", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${user.jwt_token}`,
+            },
+        });
+
+        if(!response.ok){
+            if(response.status === 401){
+                logout();
+            }
+            throw new Error("Failed to fetch events");
+        }
+
+        const fetchedEvents = await response.json();
+        setEvents(fetchedEvents.results);
+    }
+
+    useEffect(() => {
+        const run = async () => {
+          try {
+            await fetchEvents();
+          } catch (err) {
+            console.error("Error fetching events:", err);
+          }
+        };
+      
+        run();
+      }, []);
+        
+
 
     return (
         <>
@@ -51,7 +89,7 @@ const ListView = () => {
             <form className="search-form" onSubmit={handleSearchSubmit}>
             <input
                 type="text"
-                placeholder="Search for events..."
+                placeholder="Search for events by title..."
                 value={searchTerm}
                 onChange={handleSearchChange} // Event 1: onChange
                 className="search-input"
@@ -60,7 +98,7 @@ const ListView = () => {
             <button type="button" className="clear-button" onClick={handleClear}>Clear</button> {/* Event 2: onClick */}
             </form>
 
-            <div className="filter-container">
+            {/* <div className="filter-container">
             <input
                 type="text"
                 placeholder="Enter location..."
@@ -83,7 +121,7 @@ const ListView = () => {
                 <option>Culture</option>
                 <option>Entertainment</option>
             </select>
-            </div>
+            </div> */}
 
             {/* Event Results */}
             <div className="event-list">
@@ -91,8 +129,8 @@ const ListView = () => {
 
                 <EventCard
                     key={event.id}
-                    onClick={handleEventClick} // ✅ Pass function reference
-                    event={event} // ✅ Pass event object
+                    onClick={handleEventClick} // Pass function reference
+                    event={event} // Pass event object
                 />
             ))}
             </div>

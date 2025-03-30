@@ -1,70 +1,94 @@
-import { useState, useEffect } from "react";
+import { useState, useContext } from "react";
 import MainLayout from "../../layouts/MainLayout";
 import "../../styles/styles.css";
 import colors from '../../theme/colors';
 import { AddressAutofill } from "@mapbox/search-js-react";
-import events from '../../data/fakeData';
+import { AuthContext } from "../../context/AuthContext";
 
-const ACCESS_TOKEN = import.meta.env.VITE_MAP_BOX_API_KEY; // ✅ Replace with actual token
 const CreateEvent = () => {
+    const { user, logout } = useContext(AuthContext); // Get user state & logout function
     // const [address, setAddress] = useState("");
     // const [city, setCity] = useState("");
-    const [eventData, setEventData] = useState({
+    const initialEventData = {
         title: "",
         address: "",
         city: "",
         state: "",
         zip: "",
         country: "",
-        date: "",
+        start_date: "",
         type: "",
         description: "",
-    });
+      };
+    const [eventData, setEventData] = useState(initialEventData);
 
-    const createEvent = (e) => {
-        //setAddress("goodbye");
-        //events.push(eventData);
-        setEventData((prevData) => {
-            const newData = {
-                ...prevData,
-                address: "test",
-                city: "qwe",
-                state: "asdf",
-                zip: "123",
-                country: "asda"
-            };
-            if (prevData.address === newData.address) {
-                console.log("State not updating because address is the same.");
-            } else {
-                console.log("State updated successfully!");
+    const createEvent = async (e) => {
+        e.preventDefault();
+    
+        // Define the required fields in the order you want to validate
+        const requiredFields = [
+            { key: "title", label: "Title" },
+            { key: "address", label: "Address" },
+            { key: "city", label: "City" },
+            { key: "state", label: "State" },
+            { key: "zip", label: "ZIP Code" },
+            { key: "country", label: "Country" },
+            { key: "start_date", label: "Date" },
+            { key: "type", label: "Type" }
+        ];
+    
+        for (const field of requiredFields) {
+            if (!eventData[field.key] || eventData[field.key].trim() === "") {
+                alert(`${field.label} is required.`);
+                return;
             }
-            return newData;
-        });
+        }
+    
+        try {
+            const response = await fetch("http://localhost:8000/api/event", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${user.jwt_token}`,
+                },
+                body: JSON.stringify(eventData),
+            });
+    
+            if (!response.ok) {
+                if (response.status === 401) {
+                    logout();
+                }
+                const error = await response.json();
+                console.error("Error creating event:", error);
+                alert("Failed to create event.");
+                return;
+            }
+    
+            alert("Event created successfully!");
+            setEventData(initialEventData); // reset form
+        } catch (err) {
+            console.error("Unexpected error:", err);
+            alert("Something went wrong.");
+        }
     };
 
     const handleChange = (e) => {
-        console.log("here");
         setEventData({
             ...eventData,
             [e.target.name]: e.target.value,
         });
     };
 
-    // ✅ Handle Address Autofill Selection (Autofill & Keep Manual Input)
+    // Handle Address Autofill Selection (Autofill & Keep Manual Input)
     const handleAutofillRetrieve = (res) => {
 
         if (res.features.length > 0) {
-            console.log(res);
             const place = res.features[0];
-            const context = place.context || [];
-
-            console.log("maybe here: ", place.properties.address_line1)
-
             setEventData((prevData) => {
                 const newData = {
                     ...prevData,
-                    address: place.properties.address_line1 || "", // Ensure it's a string
-                    city: place.properties.address_level12 || "",
+                    address: place.properties.address_line1 || "",
+                    city: place.properties.address_level2 || "",
                     state: place.properties.region_code || "",
                     zip: place.properties.postcode || "",
                     country: place.properties.country || "",
@@ -77,16 +101,12 @@ const CreateEvent = () => {
         }
     };
 
-    useEffect(() => {
-        console.log("Updated Address", eventData.address, eventData.city, eventData.country, eventData.date, eventData.description, eventData.state, eventData.title, eventData.type, eventData.zip);
-    }, [eventData]); 
-
     return (
         <MainLayout title="Create Event">
             <div className="container mt-4">
                 <div className="card shadow-lg p-4 col-md-6 mx-auto">
                     <h3 className="text-center mb-4">Create an Event</h3>
-                    <form onSubmit={(e) => { e.preventDefault(); console.log("Event Created:", eventData); }}>
+                    <form onSubmit={(e) => { createEvent(e) }}>
                         
                         {/* Event Title */}
                         <div className="mb-3">
@@ -102,10 +122,10 @@ const CreateEvent = () => {
                             />
                         </div>
 
-                        {/* ✅ Address Autofill - Typing & Autofill Work */}
+                        {/* Address Autofill - Typing & Autofill Work */}
                         <div className="mb-3">
                             <label className="form-label">Address</label>
-                            <AddressAutofill accessToken={ACCESS_TOKEN} onRetrieve={handleAutofillRetrieve}>
+                            <AddressAutofill accessToken={user.mapbox_token} onRetrieve={handleAutofillRetrieve}>
                                 <input
                                     type="text"
                                     className="form-control"
@@ -134,8 +154,6 @@ const CreateEvent = () => {
                                             type="text"
                                             className="form-control"
                                             name="state"
-                                            // value={eventData.state}
-                                            // onChange={handleChange}
                                             autoComplete="address-level1"
                                             required
                                         />
@@ -149,8 +167,6 @@ const CreateEvent = () => {
                                             type="text"
                                             className="form-control"
                                             name="zip"
-                                            // value={eventData.zip}
-                                            // onChange={handleChange}
                                             autoComplete="postal-code"
                                             required
                                         />
@@ -161,8 +177,6 @@ const CreateEvent = () => {
                                             type="text"
                                             className="form-control"
                                             name="country"
-                                            // value={eventData.country}
-                                            // onChange={handleChange}
                                             autoComplete="country"
                                             required
                                         />
@@ -171,69 +185,14 @@ const CreateEvent = () => {
                             </AddressAutofill>
                         </div>
 
-                        {/* ✅ City, State, ZIP, Country Fields - Autofilled but Editable */}
-                        {/* <div className="row mb-3">
-                            <div className="col">
-                                <label className="form-label">City</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    name="city"
-                                    value={eventData.city}
-                                    onChange={handleChange}
-                                    autoComplete="address-level2"
-                                    required
-                                />
-                            </div>
-                            <div className="col">
-                                <label className="form-label">State</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    name="state"
-                                    value={eventData.state}
-                                    onChange={handleChange}
-                                    autoComplete="address-level1"
-                                    required
-                                />
-                            </div>
-                        </div> */}
-
-                        {/* <div className="row mb-3">
-                            <div className="col">
-                                <label className="form-label">ZIP Code</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    name="zip"
-                                    value={eventData.zip}
-                                    onChange={handleChange}
-                                    autoComplete="postal-code"
-                                    required
-                                />
-                            </div>
-                            <div className="col">
-                                <label className="form-label">Country</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    name="country"
-                                    value={eventData.country}
-                                    onChange={handleChange}
-                                    autoComplete="country"
-                                    required
-                                />
-                            </div>
-                        </div> */}
-
                         {/* Date */}
                         <div className="mb-3">
                             <label className="form-label">Date</label>
                             <input
                                 type="date"
                                 className="form-control"
-                                name="date"
-                                value={eventData.date}
+                                name="start_date"
+                                value={eventData.start_date}
                                 onChange={handleChange}
                                 required
                             />
@@ -254,6 +213,25 @@ const CreateEvent = () => {
                                 <option value="Workshop">Workshop</option>
                                 <option value="Festival">Festival</option>
                                 <option value="Sports">Sports</option>
+                                <option value="Volunteer">Volunteer</option>
+                                <option value="Networking">Networking</option>
+                                <option value="Meetup">Meetup</option>
+                                <option value="Fundraiser">Fundraiser</option>
+                                <option value="Conference">Conference</option>
+                                <option value="Seminar">Seminar</option>
+                                <option value="Webinar">Webinar</option>
+                                <option value="Party">Party</option>
+                                <option value="Ceremony">Ceremony</option>
+                                <option value="Class">Class</option>
+                                <option value="Open House">Open House</option>
+                                <option value="Competition">Competition</option>
+                                <option value="Tour">Tour</option>
+                                <option value="Exhibition">Exhibition</option>
+                                <option value="Game Night">Game Night</option>
+                                <option value="Movie Night">Movie Night</option>
+                                <option value="Religious">Religious</option>
+                                <option value="Community">Community</option>
+                                <option value="Other">Other</option>
                             </select>
                         </div>
 
