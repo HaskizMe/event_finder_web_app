@@ -3,6 +3,7 @@ import MainLayout from "../../layouts/MainLayout";
 import { useState, useEffect, useContext } from 'react';
 import { MdArrowBack } from 'react-icons/md';
 import colors from '../../theme/colors';
+import { API_BASE_URL } from "../../config";
 
 
 const SignUpForm = () => {
@@ -15,7 +16,7 @@ const SignUpForm = () => {
 
     const createAccount = async (userData) => {
       try {
-        const response = await fetch("http://localhost:8000/api/signup/", {
+        const response = await fetch(`${API_BASE_URL}/api/signup/`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -31,7 +32,6 @@ const SignUpForm = () => {
         }
     
         const data = await response.json();
-        console.log("Signup success, JWT token:", data.jwt_token);
     
         setError("User created!");
         setIsSuccess(true);

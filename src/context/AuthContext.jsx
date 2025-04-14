@@ -1,5 +1,7 @@
 /* eslint-disable react/prop-types */
 import { createContext, useEffect, useState } from 'react';
+import { API_BASE_URL } from "../config";
+
 
 export const AuthContext = createContext();
 
@@ -14,7 +16,7 @@ export const AuthProvider = ({ children }) => {
       // Fetch full user data from /me endpoint
       const fetchUser = async () => {
         try {
-          const response = await fetch("http://localhost:8000/api/me", {
+          const response = await fetch(`${API_BASE_URL}/api/me`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -38,7 +40,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (userData) => {
-    const response = await fetch("http://localhost:8000/api/login", {
+    const response = await fetch(`${API_BASE_URL}/api/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

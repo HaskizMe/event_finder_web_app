@@ -4,6 +4,7 @@ import "./Search.css"
 // import events from '../../data/fakeData'
 import EventCard from "../../components/EventCard";
 import { AuthContext } from "../../context/AuthContext";
+import { API_BASE_URL } from "../../config";
 
 
 const ListView = () => {
@@ -50,7 +51,7 @@ const ListView = () => {
 
     const fetchEvents = async () => {
 
-        const response = await fetch("http://localhost:8000/api/events", {
+        const response = await fetch(`${API_BASE_URL}/api/events`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

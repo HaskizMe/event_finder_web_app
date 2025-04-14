@@ -17,7 +17,6 @@ function Login() {
     useEffect(() => {
         if(user){
             // Need to add an admin page or a page that only logged in users can access
-            console.log('User logged in');
             navigate('/');
         }
     }, [user, navigate]);
