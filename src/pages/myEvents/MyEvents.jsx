@@ -4,6 +4,7 @@ import MainLayout from "../../layouts/MainLayout";
 import EventCard from '../../components/EventCard';
 import { AuthContext } from "../../context/AuthContext";
 import RedButton from '../../components/RedButton';
+import { API_BASE_URL } from "../../config";
 
 
 const MyEvents = () => {
@@ -14,7 +15,7 @@ const MyEvents = () => {
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const response = await fetch("http://localhost:8000/api/events", {
+                const response = await fetch(`${API_BASE_URL}/api/events`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",

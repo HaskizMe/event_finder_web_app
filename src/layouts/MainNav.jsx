@@ -3,6 +3,7 @@ import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import color from '../theme/colors';
 import { AuthContext } from "../context/AuthContext";
+import { API_BASE_URL } from "../config";
 
 const MainNav = () => {
   const { user, logout } = useContext(AuthContext); // Get user state & logout function
@@ -14,9 +15,9 @@ const MainNav = () => {
     const fetchWeather = async () => {
       try {
         // 1. Get the weather API token from your backend
-        const tokenRes = await fetch("http://localhost:8000/api/keys/weather");
+        const tokenRes = await fetch(`${API_BASE_URL}/api/keys/weather`);
         const tokenData = await tokenRes.json();
-        const API_KEY = tokenData;
+        const API_KEY = tokenData.key;
   
         // 2. Get user location
         if (navigator.geolocation) {

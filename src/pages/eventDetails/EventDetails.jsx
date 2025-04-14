@@ -4,6 +4,7 @@ import MainLayout from "../../layouts/MainLayout";
 import colors from "../../theme/colors";
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from "../../context/AuthContext";
+import { API_BASE_URL } from "../../config";
 
 const EventDetails = () => {
   const { id } = useParams();
@@ -16,7 +17,7 @@ const EventDetails = () => {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/event/${id}`, {
+        const response = await fetch(`${API_BASE_URL}/api/event/${id}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -33,11 +34,7 @@ const EventDetails = () => {
 
         // Check if current user is already attending
         if (data.attendees?.includes(user.user_id)) {
-          console.log("User is attending");
           setAttending(true);
-        } else {
-          console.log("User is not attending");
-          //setAttending(false);
         }
       } catch (error) {
         console.error("Error loading event:", error);
@@ -51,7 +48,7 @@ const EventDetails = () => {
 
   const handleClick = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/api/event/${id}/attend`, {
+      const response = await fetch(`${API_BASE_URL}/api/event/${id}/attend`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -75,7 +72,7 @@ const EventDetails = () => {
     if (!confirmDelete) return;
   
     try {
-      const response = await fetch(`http://localhost:8000/api/event/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/event/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

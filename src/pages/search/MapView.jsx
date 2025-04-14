@@ -7,6 +7,7 @@ import RedButton from '../../components/RedButton';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import colors from '../../theme/colors';
 import { AuthContext } from "../../context/AuthContext";
+import { API_BASE_URL } from '../../config';
 
 const INITIAL_CENTER = [-111.8910, 40.7608];
 const INITIAL_ZOOM = 10.12;
@@ -32,7 +33,7 @@ const MapView = () => {
 
     const fetchEventsAndPlaceMarkers = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/events", {
+        const response = await fetch(`${API_BASE_URL}/api/events`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${user.jwt_token}`,

@@ -4,6 +4,7 @@ import "../../styles/styles.css";
 import colors from '../../theme/colors';
 import { AddressAutofill } from "@mapbox/search-js-react";
 import { AuthContext } from "../../context/AuthContext";
+import { API_BASE_URL } from "../../config";
 
 const CreateEvent = () => {
     const { user, logout } = useContext(AuthContext); // Get user state & logout function
@@ -45,7 +46,7 @@ const CreateEvent = () => {
         }
     
         try {
-            const response = await fetch("http://localhost:8000/api/event", {
+            const response = await fetch(`${API_BASE_URL}/api/event`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
